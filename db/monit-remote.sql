@@ -5,7 +5,7 @@
  *
  */
 
-CREATE TABLE monit_hosts (
+CREATE TABLE hosts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   monit_httpd_url TEXT NOT NULL,
   monit_httpd_username TEXT NOT NULL DEFAULT 'admin',
@@ -18,5 +18,5 @@ CREATE TABLE monit_hosts (
   ssh_private_key TEXT NULL,
   is_enabled TINYINT(1) NOT NULL DEFAULT 1
 );
-CREATE UNIQUE INDEX monit_httpd_url_UNIQUE on monit_hosts (monit_httpd_url);
-INSERT INTO monit_hosts (monit_httpd_url) VALUES('http://localhost:2812');
+CREATE UNIQUE INDEX monit_httpd_url_UNIQUE on hosts (monit_httpd_url);
+INSERT INTO hosts (monit_httpd_url) VALUES('http://localhost:2812');
