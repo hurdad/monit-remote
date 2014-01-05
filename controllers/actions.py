@@ -5,7 +5,7 @@ class start:
 
     def GET(self, id, name):
         myhost = host.get_host(id)
-        return monit.action.start(myhost, name)
+        return monit.start(myhost, name)
       
 class stop:
 
