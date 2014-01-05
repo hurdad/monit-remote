@@ -5,12 +5,13 @@ import libxml2
 types = {0: 'Filesystem', 1: 'Directory', 2: 'File', 3: 'Daemon', 4: 'Connection', 5: 'System'}
 
 def status(host):
-
+    #get monit status xml
     url = host.monit_httpd_url + '/_status?format=xml'
     (code, xml) = get_request(url, host.monit_httpd_username, host.monit_httpd_password)  
     if code != 200:
         return None
-    
+     
+    #parse xml
     doc = libxml2.parseDoc(xml)
      
     #system
@@ -30,7 +31,7 @@ def status(host):
             'cpu_system' : ctxt.xpathEval('system/cpu/system')[0].getContent(),
             'cpu_wait' : ctxt.xpathEval('system/cpu/wait')[0].getContent(),
             'memory' : ctxt.xpathEval('system/memory/percent')[0].getContent(),
-            #swap = ctxt.xpathEval('system/swap/percent')[0].getContent(),
+            #'swap' : ctxt.xpathEval('system/swap/percent')[0].getContent(),
             'uptime' : ctxt.xpathEval('//server/uptime')[0].getContent()
         }
         systems.append(system_tuple);
