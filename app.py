@@ -17,7 +17,7 @@ urls = (
     '/config/list/(\d+)', 'controllers.configs.list',
     '/config/(\d+)/(.*?)', 'controllers.configs.crud',
     '/status/summary', 'controllers.status.summary',
-    '/status/host/(\d+)', 'controllers.status.host'
+    '/status/(\d+)', 'controllers.status.status'
 )
 
 web.config.debug = True
