@@ -5,7 +5,8 @@ import libxml2
 types = {0: 'Filesystem', 1: 'Directory', 2: 'File', 3: 'Daemon', 4: 'Connection', 5: 'System'}
 
 def status(host):
-    #get monit status xml
+
+    #http get monit status xml
     url = host.monit_httpd_url + '/_status?format=xml'
     (code, xml) = get_request(url, host.monit_httpd_username, host.monit_httpd_password)  
     if code != 200:
