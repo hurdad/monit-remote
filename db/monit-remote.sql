@@ -20,3 +20,4 @@ CREATE TABLE hosts (
 );
 CREATE UNIQUE INDEX monit_httpd_url_UNIQUE on hosts (monit_httpd_url);
 INSERT INTO hosts (monit_httpd_url) VALUES('http://localhost:2812');
+INSERT INTO hosts (monit_httpd_url) VALUES('http://localhost:2813');

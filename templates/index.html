@@ -1,13 +1,13 @@
-$def with (name)
+$def with (summary)
 <!DOCTYPE html>
 <html>
   <head>
     <title>monit-remote</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="static/include/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/include/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom -->
-    <link href="static/css/app.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -18,34 +18,110 @@ $def with (name)
     <![endif]-->
   </head>
   <body>
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
-            <a class="navbar-brand" href="#">monit-remote</a>
-    </nav>
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">monit-remote</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#" id="add-monit-host">Add Host</a></li>    
+            </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
     <div class="container">
-      
         <div class="jumbotron">
-          <h1>Status</h1>
+          <h1>Monit Summary</h1>
         </div>
-
-        <div class="row-fluid yui3-skin-sam">
-            <div class="span12">
-                <div id="status"/>
-
-            </div>
-        </div>
-   
+    
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>System</th>
+                    <th>Status</th>
+                    <th>Load</th>
+                    <th style="width: 100px">CPU</th>
+                    <th style="width: 100px">Memory</th>
+                    <th style="width: 100px">Swap</th>
+                    <th style="width: 100px">Running Processes</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                $for system in summary
+                <tr>
+                    <td><a href=$system['url']>$system['url']</td>
+                    <td>$system['system']</td>
+                    <td>$system['status']</td>
+                    <td>$system['load']</td>
+                    <td>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['cpu']" aria-valuemin="0" aria-valuemax="100" style="width: $$system['cpu']%;">
+                            <span class="show">$system['cpu'] %</span>
+                          </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['memory']" aria-valuemin="0" aria-valuemax="100" style="width: $system['memory']%;">
+                            <span class="show">$system['memory_megabyte'] MB</span>
+                          </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['swap']" aria-valuemin="0" aria-valuemax="100" style="width: $system['swap']%;">
+                            <span class="show">$system['swap_megabyte'] MB</span>
+                          </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['running_percent']" aria-valuemin="0" aria-valuemax="100" style="width: $system['running_percent']%;">
+                            <span class="show">$system['running_processes']/$system['total_processes']</span>
+                          </div>
+                        </div>
+                    </td>
+                    <td><button type="button" class="btn btn-info" action="details" host-id="$system['id']">Details</button></td>
+                    <td><button type="button" class="btn btn-primary" action="edit" host-id="$system['id']">Edit</button></td>
+                </tr>   
+            </tbody>
+        </table>
+  
     </div>
     <!-- /container-->
 
+    <!-- confirmation delete modal -->
+    <div class="modal hide" id="confirmation-delete-modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h3>Confirmation</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete?</p>
+        </div>
+        <div class="modal-footer">        
+            <div id="confirmation-delete-alert" class="alert alert-error"></div>
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <a id="continue-delete-button" href="#" class="btn btn-primary">Continue</a>
+        </div>
+    </div>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="static/include/jquery/jquery-1.10.2.min.js"></script>
+    <script src="/static/include/jquery/jquery-1.10.2.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="static/include/bootstrap/js/bootstrap.min.js"></script>
-
-    <script src="http://yui.yahooapis.com/3.14.1/build/yui/yui-min.js"></script>
-
-
-    <!-- App -->    
-    <script src="static/js/index.js"></script>
+    <script src="/static/include/bootstrap/js/bootstrap.min.js"></script>
+    <!-- App -->
+    <script src="/static/js/index.js"></script>
   </body>
 </html>

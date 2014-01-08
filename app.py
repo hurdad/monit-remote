@@ -4,7 +4,7 @@ urls = (
     
     #html routes
     '/', 'controllers.html.index',
-    '/host/(\d+)', 'controllers.html.host',
+    '/details/(\d+)', 'controllers.html.details',
 
     #ajax routes
     '/action/start/(\d+)/(.*)', 'controllers.actions.start',
@@ -15,9 +15,7 @@ urls = (
     '/host/list', 'controllers.hosts.list',
     '/host/(\d+)', 'controllers.hosts.crud',
     '/config/list/(\d+)', 'controllers.configs.list',
-    '/config/(\d+)/(.*?)', 'controllers.configs.crud',
-    '/status/summary', 'controllers.status.summary',
-    '/status/(\d+)', 'controllers.status.status'
+    '/config/(\d+)/(.*?)', 'controllers.configs.crud'
 )
 
 web.config.debug = True

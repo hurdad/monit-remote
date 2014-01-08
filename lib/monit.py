@@ -2,7 +2,7 @@ import urllib
 import urllib2
 import libxml2
 
-types = {0: 'Filesystem', 1: 'Directory', 2: 'File', 3: 'Daemon', 4: 'Connection', 5: 'System'}
+types = {0: 'Filesystem', 1: 'Directory', 2: 'File', 3: 'Process', 4: 'Host', 5: 'System', 6: 'Fifo', 7: 'Program' }
 
 def status(host):
 
@@ -14,10 +14,23 @@ def status(host):
      
     #parse xml
     doc = libxml2.parseDoc(xml)
-     
+    ctxt = doc.xpathNewContext()
+
+    #platform
+    for platform in ctxt.xpathEval("//platform"):
+        ctxt.setContextNode(platform)
+
+        platform_tuple = {
+            'name' : ctxt.xpathEval('name')[0].getContent(),
+            'release' : ctxt.xpathEval('release')[0].getContent(),
+            'version' : ctxt.xpathEval('version')[0].getContent(),
+            'machine' : ctxt.xpathEval('machine')[0].getContent(),
+            'cpu' : ctxt.xpathEval('cpu')[0].getContent(),
+            'memory' : ctxt.xpathEval('memory')[0].getContent()
+        }
+
     #system
     systems = []
-    ctxt = doc.xpathNewContext()
     for system in ctxt.xpathEval("//service[@type=5]"):
         ctxt.setContextNode(system)
 
@@ -32,7 +45,9 @@ def status(host):
             'cpu_system' : ctxt.xpathEval('system/cpu/system')[0].getContent(),
             'cpu_wait' : ctxt.xpathEval('system/cpu/wait')[0].getContent(),
             'memory' : ctxt.xpathEval('system/memory/percent')[0].getContent(),
-            #'swap' : ctxt.xpathEval('system/swap/percent')[0].getContent(),
+            'memory_kilobyte' : ctxt.xpathEval('system/memory/kilobyte')[0].getContent(),
+            'swap' : ctxt.xpathEval('system/swap/percent')[0].getContent() if len(ctxt.xpathEval('system/swap/percent')) > 0 else "0",
+            'swap_kilobyte' : ctxt.xpathEval('system/swap/kilobyte')[0].getContent() if len(ctxt.xpathEval('system/swap/kilobyte')) > 0 else "N/A",
             'uptime' : ctxt.xpathEval('//server/uptime')[0].getContent()
         }
         systems.append(system_tuple);
@@ -47,9 +62,9 @@ def status(host):
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
-            'percent' : ctxt.xpathEval('block/percent')[0].getContent(),
-            'usage' : ctxt.xpathEval('block/usage')[0].getContent(),
-            'total' : ctxt.xpathEval('block/total')[0].getContent()
+            'percent' : ctxt.xpathEval('block/percent')[0].getContent() if len(ctxt.xpathEval('block/percent')) > 0 else "N/A",
+            'usage' : ctxt.xpathEval('block/usage')[0].getContent() if len(ctxt.xpathEval('block/usage')) > 0 else "N/A",
+            'total' : ctxt.xpathEval('block/total')[0].getContent() if len(ctxt.xpathEval('block/total')) > 0 else "N/A",
         }
         filesystems.append(fs_tuple);
 
@@ -63,11 +78,11 @@ def status(host):
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
-            'pid' : ctxt.xpathEval('pid')[0].getContent(),
-            'uptime' : ctxt.xpathEval('uptime')[0].getContent(),
-            'memory' : ctxt.xpathEval('memory')[0].getContent(),
-            'cpu' : ctxt.xpathEval('cpu')[0].getContent()
-        }
+            'pid' : ctxt.xpathEval('pid')[0].getContent() if len(ctxt.xpathEval('pid')) > 0 else "N/A",
+            'uptime' : ctxt.xpathEval('uptime')[0].getContent() if len(ctxt.xpathEval('uptime')) > 0 else "N/A",
+            'memory' : ctxt.xpathEval('memory')[0].getContent() if len(ctxt.xpathEval('memory')) > 0 else "N/A",
+            'cpu' : ctxt.xpathEval('cpu')[0].getContent() if len(ctxt.xpathEval('cpu')) > 0 else "N/A",
+        } 
         processes.append(proc_tuple);
 
     #hosts
@@ -80,12 +95,12 @@ def status(host):
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
-            'response_time' : ctxt.xpathEval('port/resoponsetime')[0].getContent()
+            'response_time' : ctxt.xpathEval('port/resoponsetime')[0].getContent() if len(ctxt.xpathEval('port/resoponsetime')) > 0 else "N/A",
         }
         hosts.append(host_tuple);
  
     #build data structure
-    data = {'system' : systems, 'filesystem' : filesystems, 'processes' : processes, 'hosts' : hosts}
+    data = {'platform' : platform_tuple, 'systems' : systems, 'filesystems' : filesystems, 'processes' : processes, 'hosts' : hosts}
     
     #clean up
     doc.freeDoc()
@@ -137,12 +152,10 @@ def post_request(url, username, password, data):
     req = urllib2.Request(url, data)
 
     try:
-        f = urllib2.urlopen(req)     
+        f = urllib2.urlopen(req)   
+        return ( f.getcode(), f.read() )  
     except IOError, e:
-        print e
-
-    return ( f.getcode(), f.read() )
-      
+         return ( None, None )
 
 def get_request(url, username, password):
     
@@ -155,9 +168,8 @@ def get_request(url, username, password):
         urllib2.install_opener(opener)
 
     try:
-        f = urllib2.urlopen(url)     
+        f = urllib2.urlopen(url)  
+        return ( f.getcode(), f.read() )     
     except IOError, e:
-        print e
-
-    return ( f.getcode(), f.read() )
+        return ( None, None )
     

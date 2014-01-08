@@ -3,7 +3,7 @@ import web, datetime
 db = web.database(dbn='sqlite', db='db/monit-remote.db')
 
 def get_hosts():
-    return list(db.select('hosts', order='id DESC'))
+    return list(db.select('hosts', order='id ASC'))
 
 def get_host(id):
     try:
