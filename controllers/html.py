@@ -19,17 +19,17 @@ class index:
                 #loop processes
                 proc_counter = 0
                 for proc in mystatus['processes']:
-                    if proc['status'] == "0":
+                    if proc['status'] == '0' and proc['monitored'] == '1':
                         proc_counter = proc_counter + 1
 
                 #loop systems
                 for system in mystatus['systems']:
                     
-                    if system['status'] == '0' and system['monitor'] == '2':
+                    if system['status'] == '0' and system['monitored'] == '2':
                         status = 'initalzing'
-                    elif system['status'] == '0' and system['monitor'] == '1':
+                    elif system['status'] == '0' and system['monitored'] == '1':
                         status = 'running'
-                    elif system['monitor'] == '0' and system['monitor'] == '0':
+                    elif system['monitor'] == '0' and system['monitored'] == '0':
                         status = 'not monitored'
                     else:
                         status = 'unknown'

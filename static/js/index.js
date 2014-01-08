@@ -2,8 +2,23 @@ $(function () {
     $(document).ready(function () {
 
 
+        //details button click handler
+        $('td > button[action="details"]').click(function () {
+            host_id = $(this).attr('host-id');
+            window.location = "details/" + host_id;
+        });
 
+        //edit button click handler
+        $('td > button[action="edit"]').click(function () {
+            host_id = $(this).attr('host-id');
+            
+        });
 
+        //add button click handler
+        $('#add-monit-host').click(function () {
+            $('#add-host-modal').modal('show');
+
+        });
 
 
 

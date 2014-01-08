@@ -37,7 +37,7 @@ def status(host):
         system_tuple = {
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
-            'monitor' : ctxt.xpathEval('monitor')[0].getContent(),
+            'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
             'load_one' : ctxt.xpathEval('system/load/avg01')[0].getContent(),
             'load_five' : ctxt.xpathEval('system/load/avg05')[0].getContent(),
             'load_fifteen' : ctxt.xpathEval('system/load/avg15')[0].getContent(),
