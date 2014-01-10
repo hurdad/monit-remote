@@ -1,237 +1,236 @@
 $def with (summary)
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>monit-remote</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="/static/include/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom -->
-    <link href="/static/css/app.css" rel="stylesheet">
+    <head>
+        <title>monit-remote</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="/static/include/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom -->
+        <link href="/static/css/app.css" rel="stylesheet">
 
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <!-- Static navbar -->
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">monit-remote</a>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <!-- Static navbar -->
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">monit-remote</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="#" id="add-monit-host">Add Host</a></li>    
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#" id="add-monit-host">Add Host</a></li>    
-            </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-    <div class="container">
-        <div class="jumbotron">
-          <h1>Monit Summary</h1>
+        <div class="container">
+            <div class="jumbotron">
+              <h1>Monit Summary</h1>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Monit URL</th>
+                        <th>System</th>
+                        <th>Status</th>
+                        <th>Load</th>
+                        <th style="width: 100px">CPU</th>
+                        <th style="width: 100px">Memory</th>
+                        <th style="width: 100px">Swap</th>
+                        <th style="width: 100px">Running Processes</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $for system in summary
+                    <tr>
+                        <td><a href=$system['url']>$system['url']</td>
+                        <td>$system['system']</td>
+                        <td>$system['status']</td>
+                        <td>$system['load']</td>
+                        <td>
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="$system['cpu']" aria-valuemin="0" aria-valuemax="100" style="width: $system['cpu']%;">
+                                <span class="show">$system['cpu'] %</span>
+                              </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="$system['memory']" aria-valuemin="0" aria-valuemax="100" style="width: $system['memory']%;">
+                                <span class="show">$system['memory_megabyte'] MB</span>
+                              </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="$system['swap']" aria-valuemin="0" aria-valuemax="100" style="width: $system['swap']%;">
+                                <span class="show">$system['swap_megabyte'] MB</span>
+                              </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="$system['running_percent']" aria-valuemin="0" aria-valuemax="100" style="width: $system['running_percent']%;">
+                                <span class="show">$system['running_processes']/$system['total_processes']</span>
+                              </div>
+                            </div>
+                        </td>
+                        <td><button type="button" class="btn btn-info" action="detail-host" host-id="$system['id']">Details</button></td>
+                        <td><button type="button" class="btn btn-primary" action="edit-host" host-id="$system['id']">Edit</button></td>
+                    </tr>   
+                </tbody>
+            </table>
         </div>
-    
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Monit URL</th>
-                    <th>System</th>
-                    <th>Status</th>
-                    <th>Load</th>
-                    <th style="width: 100px">CPU</th>
-                    <th style="width: 100px">Memory</th>
-                    <th style="width: 100px">Swap</th>
-                    <th style="width: 100px">Running Processes</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                $for system in summary
-                <tr>
-                    <td><a href=$system['url']>$system['url']</td>
-                    <td>$system['system']</td>
-                    <td>$system['status']</td>
-                    <td>$system['load']</td>
-                    <td>
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['cpu']" aria-valuemin="0" aria-valuemax="100" style="width: $$system['cpu']%;">
-                            <span class="show">$system['cpu'] %</span>
-                          </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['memory']" aria-valuemin="0" aria-valuemax="100" style="width: $system['memory']%;">
-                            <span class="show">$system['memory_megabyte'] MB</span>
-                          </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['swap']" aria-valuemin="0" aria-valuemax="100" style="width: $system['swap']%;">
-                            <span class="show">$system['swap_megabyte'] MB</span>
-                          </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="$system['running_percent']" aria-valuemin="0" aria-valuemax="100" style="width: $system['running_percent']%;">
-                            <span class="show">$system['running_processes']/$system['total_processes']</span>
-                          </div>
-                        </div>
-                    </td>
-                    <td><button type="button" class="btn btn-info" action="detail-host" host-id="$system['id']">Details</button></td>
-                    <td><button type="button" class="btn btn-primary" action="edit-host" host-id="$system['id']">Edit</button></td>
-                </tr>   
-            </tbody>
-        </table>
-    </div>
-    <!-- /container-->
+        <!-- /container-->
 
-    <!-- add-host-modal -->
-    <div class="modal fade" id="add-host-modal">>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><h3>Add Host</h3></h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="add-monit-httpd-url-text">Monit httpd URL</label>
-                            <input type="text" class="form-control" id="add-monit-httpd-url-text" placeholder="http://monit-host:2812">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-monit-httpd-username-text">Monit httpd username</label>
-                            <input type="text" class="form-control" id="add-monit-httpd-username-text" placeholder="admin">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-monit-httpd-password-text">Monit httpd password</label>
-                            <input type="text" class="form-control" id="add-monit-httpd-password-text" placeholder="monit">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-monit-config-directory-text">Monit config directory</label>
-                            <input type="text" class="form-control" id="add-monit-config-directory-text" placeholder="/etc/monit.d/">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-monit-binary-path-text">Monit binary path</label>
-                            <input type="text" class="form-control" id="add-monit-binary-path-text" placeholder="/bin/monit">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-ssh-ip-text">SSH IP</label>
-                            <input type="text" class="form-control" id="add-ssh-ip-text" placeholder="monit-host"> 
-                        </div>
-                        <div class="form-group">
-                            <label for="add-ssh-username-text">SSH username</label>
-                            <input type="text" class="form-control" id="add-ssh-username-text" placeholder="root">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-ssh-private-key-text">SSH Private Key</label>
-                            <input type="text" class="form-control" id="add-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
-                        </div>
-                    </form>       
-                </div>
-                <div class="modal-footer">
-                    <div id="add-host-alert" class="alert alert-danger"></div>
+        <!-- add-host-modal -->
+        <div class="modal fade" id="add-host-modal">>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h3>Add Host</h3></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="add-monit-httpd-url-text">Monit httpd URL</label>
+                                <input type="text" class="form-control" id="add-monit-httpd-url-text" placeholder="http://monit-host:2812">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-monit-httpd-username-text">Monit httpd username</label>
+                                <input type="text" class="form-control" id="add-monit-httpd-username-text" placeholder="admin">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-monit-httpd-password-text">Monit httpd password</label>
+                                <input type="text" class="form-control" id="add-monit-httpd-password-text" placeholder="monit">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-monit-config-directory-text">Monit config directory</label>
+                                <input type="text" class="form-control" id="add-monit-config-directory-text" placeholder="/etc/monit.d/">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-monit-binary-path-text">Monit binary path</label>
+                                <input type="text" class="form-control" id="add-monit-binary-path-text" placeholder="/bin/monit">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-ssh-ip-text">SSH IP</label>
+                                <input type="text" class="form-control" id="add-ssh-ip-text" placeholder="monit-host"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="add-ssh-username-text">SSH username</label>
+                                <input type="text" class="form-control" id="add-ssh-username-text" placeholder="root">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-ssh-private-key-text">SSH Private Key</label>
+                                <input type="text" class="form-control" id="add-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
+                            </div>
+                        </form>       
+                    </div>
+                    <div class="modal-footer">
+                        <div id="add-host-alert" class="alert alert-danger"></div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="add-host-modal-save">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- edit-host-modal -->
+        <div class="modal fade" id="edit-host-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h3>Edit Host</h3></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="edit-monit-httpd-url-text">Monit httpd URL</label>
+                                <input type="text" class="form-control" id="edit-monit-httpd-url-text" placeholder="http://monit-host:2812">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-monit-httpd-username-text">Monit httpd username</label>
+                                <input type="text" class="form-control" id="edit-monit-httpd-username-text" placeholder="admin">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-monit-httpd-password-text">Monit httpd password</label>
+                                <input type="text" class="form-control" id="edit-monit-httpd-password-text" placeholder="monit">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-monit-config-directory-text">Monit config directory</label>
+                                <input type="text" class="form-control" id="edit-monit-config-directory-text" placeholder="/etc/monit.d/">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-monit-binary-path-text">Monit binary path</label>
+                                <input type="text" class="form-control" id="edit-monit-binary-path-text" placeholder="/bin/monit">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-ssh-ip-text">SSH IP</label>
+                                <input type="text" class="form-control" id="edit-ssh-ip-text" placeholder="monit-host"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-ssh-username-text">SSH username</label>
+                                <input type="text" class="form-control" id="edit-ssh-username-text" placeholder="root">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-ssh-private-key-text">SSH Private Key</label>
+                                <input type="text" class="form-control" id="edit-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
+                            </div>
+                        </form>       
+                    </div>
+                    <div class="modal-footer">
+                    <div id="edit-host-alert" class="alert alert-danger"></div>
+                    <button type="button" class="btn btn-danger" action="delete-host">Delete</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="add-host-modal-save">Save changes</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                    <button type="button" class="btn btn-primary" id="edit-host-modal-save">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
-    <!-- edit-host-modal -->
-    <div class="modal fade" id="edit-host-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><h3>Edit Host</h3></h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="edit-monit-httpd-url-text">Monit httpd URL</label>
-                            <input type="text" class="form-control" id="edit-monit-httpd-url-text" placeholder="http://monit-host:2812">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-monit-httpd-username-text">Monit httpd username</label>
-                            <input type="text" class="form-control" id="edit-monit-httpd-username-text" placeholder="admin">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-monit-httpd-password-text">Monit httpd password</label>
-                            <input type="text" class="form-control" id="edit-monit-httpd-password-text" placeholder="monit">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-monit-config-directory-text">Monit config directory</label>
-                            <input type="text" class="form-control" id="edit-monit-config-directory-text" placeholder="/etc/monit.d/">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-monit-binary-path-text">Monit binary path</label>
-                            <input type="text" class="form-control" id="edit-monit-binary-path-text" placeholder="/bin/monit">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-ssh-ip-text">SSH IP</label>
-                            <input type="text" class="form-control" id="edit-ssh-ip-text" placeholder="monit-host"> 
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-ssh-username-text">SSH username</label>
-                            <input type="text" class="form-control" id="edit-ssh-username-text" placeholder="root">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-ssh-private-key-text">SSH Private Key</label>
-                            <input type="text" class="form-control" id="edit-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
-                        </div>
-                    </form>       
-                </div>
-                <div class="modal-footer">
-                <div id="edit-host-alert" class="alert alert-danger"></div>
-                <button type="button" class="btn btn-danger" action="delete-host">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="edit-host-modal-save">Save changes</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        <!-- confirmation-delete-modal -->
+        <div class="modal fade" id="confirmation-delete-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="confirmation-delete-alert" class="alert alert-danger"></div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="continue-delete-button">Continue</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
-    <!-- confirmation-delete-modal -->
-    <div class="modal fade" id="confirmation-delete-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete?</p>
-                </div>
-                <div class="modal-footer">
-                    <div id="confirmation-delete-alert" class="alert alert-danger"></div>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="continue-delete-button">Continue</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/static/include/jquery/jquery-1.10.2.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/include/bootstrap/js/bootstrap.min.js"></script>
-    <!-- App -->
-    <script src="/static/js/index.js"></script>
-  </body>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="/static/include/jquery/jquery-1.10.2.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="/static/include/bootstrap/js/bootstrap.min.js"></script>
+        <!-- App -->
+        <script src="/static/js/index.js"></script>
+    </body>
 </html>

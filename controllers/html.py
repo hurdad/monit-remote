@@ -26,10 +26,10 @@ class index:
                 for system in mystatus['systems']:
                     
                     if system['status'] == '0' and system['monitored'] == '2':
-                        status = 'initalzing'
+                        status = 'initializing'
                     elif system['status'] == '0' and system['monitored'] == '1':
                         status = 'running'
-                    elif system['monitor'] == '0' and system['monitored'] == '0':
+                    elif system['status'] == '0' and system['monitored'] == '0':
                         status = 'not monitored'
                     else:
                         status = 'unknown'

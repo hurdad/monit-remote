@@ -38,16 +38,16 @@ def status(host):
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
-            'load_one' : ctxt.xpathEval('system/load/avg01')[0].getContent(),
-            'load_five' : ctxt.xpathEval('system/load/avg05')[0].getContent(),
-            'load_fifteen' : ctxt.xpathEval('system/load/avg15')[0].getContent(),
-            'cpu_user' : ctxt.xpathEval('system/cpu/user')[0].getContent(),
-            'cpu_system' : ctxt.xpathEval('system/cpu/system')[0].getContent(),
-            'cpu_wait' : ctxt.xpathEval('system/cpu/wait')[0].getContent(),
-            'memory' : ctxt.xpathEval('system/memory/percent')[0].getContent(),
-            'memory_kilobyte' : ctxt.xpathEval('system/memory/kilobyte')[0].getContent(),
+            'load_one' : ctxt.xpathEval('system/load/avg01')[0].getContent()  if len(ctxt.xpathEval('system/load/avg01')) > 0 else "0.00",
+            'load_five' : ctxt.xpathEval('system/load/avg05')[0].getContent()  if len(ctxt.xpathEval('system/load/avg05')) > 0 else "0.00",
+            'load_fifteen' : ctxt.xpathEval('system/load/avg15')[0].getContent()  if len(ctxt.xpathEval('system/load/avg15')) > 0 else "0.00",
+            'cpu_user' : ctxt.xpathEval('system/cpu/user')[0].getContent()  if len(ctxt.xpathEval('system/cpu/user')) > 0 else "0",
+            'cpu_system' : ctxt.xpathEval('system/cpu/system')[0].getContent()  if len(ctxt.xpathEval('system/cpu/system')) > 0 else "0",
+            'cpu_wait' : ctxt.xpathEval('system/cpu/wait')[0].getContent()  if len(ctxt.xpathEval('system/cpu/wait')) > 0 else "0",
+            'memory' : ctxt.xpathEval('system/memory/percent')[0].getContent()  if len(ctxt.xpathEval('system/memory/percent')) > 0 else "0",
+            'memory_kilobyte' : ctxt.xpathEval('system/memory/kilobyte')[0].getContent()  if len(ctxt.xpathEval('system/memory/kilobyte')) > 0 else "0",
             'swap' : ctxt.xpathEval('system/swap/percent')[0].getContent() if len(ctxt.xpathEval('system/swap/percent')) > 0 else "0",
-            'swap_kilobyte' : ctxt.xpathEval('system/swap/kilobyte')[0].getContent() if len(ctxt.xpathEval('system/swap/kilobyte')) > 0 else "N/A",
+            'swap_kilobyte' : ctxt.xpathEval('system/swap/kilobyte')[0].getContent() if len(ctxt.xpathEval('system/swap/kilobyte')) > 0 else "0",
             'uptime' : ctxt.xpathEval('//server/uptime')[0].getContent()
         }
         systems.append(system_tuple);
@@ -80,8 +80,9 @@ def status(host):
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
             'pid' : ctxt.xpathEval('pid')[0].getContent() if len(ctxt.xpathEval('pid')) > 0 else "N/A",
             'uptime' : ctxt.xpathEval('uptime')[0].getContent() if len(ctxt.xpathEval('uptime')) > 0 else "N/A",
-            'memory' : ctxt.xpathEval('memory')[0].getContent() if len(ctxt.xpathEval('memory')) > 0 else "N/A",
-            'cpu' : ctxt.xpathEval('cpu')[0].getContent() if len(ctxt.xpathEval('cpu')) > 0 else "N/A",
+            'memory' : ctxt.xpathEval('memory/percent')[0].getContent() if len(ctxt.xpathEval('memory/percent')) > 0 else "N/A",
+            'memory_kilobyte' : ctxt.xpathEval('memory/kilobyte')[0].getContent() if len(ctxt.xpathEval('memory/kilobyte')) > 0 else "N/A",
+            'cpu' : ctxt.xpathEval('cpu/percent')[0].getContent() if len(ctxt.xpathEval('cpu/percent')) > 0 else "N/A",
         } 
         processes.append(proc_tuple);
 
