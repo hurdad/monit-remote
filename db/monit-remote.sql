@@ -7,7 +7,7 @@
 
 CREATE TABLE hosts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  monit_httpd_url TEXT NOT NULL,
+  monit_httpd_url TEXT NOT NULL DEFAULT 'http://localhost:2812',
   monit_httpd_username TEXT NOT NULL DEFAULT 'admin',
   monit_httpd_password TEXT NOT NULL DEFAULT 'monit',
   monit_config_directory TEXT NOT NULL DEFAULT '/etc/monit.d/',

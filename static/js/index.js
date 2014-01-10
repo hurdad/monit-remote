@@ -76,10 +76,15 @@ $(function () {
              //hide alert
             $("#add-host-alert").hide();
 
-            //clear
-            $('#add-host-form').each(function() {
-                this.reset();
-            });
+            //assign default variables
+            $("#add-monit-httpd-url-text").val('http://localhost:2812');
+            $("#add-monit-httpd-username-text").val('admin');
+            $("#add-monit-httpd-password-text").val('monit');
+            $("#add-monit-config-directory-text").val('/etc/monit.d/');
+            $("#add-monit-binary-path-text").val('/bin/monit');
+            $("#add-ssh-ip-text").val('localhost');
+            $("#add-ssh-username-text").val('root');
+            $("#add-ssh-private-key-text").val('~/.ssh/id_rsa');
 
             //show
             $('#add-host-modal').modal('show');

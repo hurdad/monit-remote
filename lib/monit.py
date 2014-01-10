@@ -154,7 +154,7 @@ def post_request(url, username, password, data):
     try:
         f = urllib2.urlopen(req)   
         return ( f.getcode(), f.read() )  
-    except IOError, e:
+    except:
          return ( None, None )
 
 def get_request(url, username, password):
@@ -170,6 +170,6 @@ def get_request(url, username, password):
     try:
         f = urllib2.urlopen(url)  
         return ( f.getcode(), f.read() )     
-    except IOError, e:
+    except :
         return ( None, None )
     
