@@ -1,4 +1,4 @@
-import web, datetime
+import sys, web, datetime
 
 db = web.database(dbn='sqlite', db='db/monit-remote.db')
 
@@ -11,14 +11,26 @@ def get_host(id):
     except IndexError:
         return None
 
-def new_host(title, data):
-    return db.insert('hosts', title=title, content=text, posted_on=datetime.datetime.utcnow())
+def new_host(data):
+   
+    try:
+        id = db.insert('hosts', monit_httpd_url=data['monit_httpd_url'],  monit_httpd_username=data['monit_httpd_username'], monit_httpd_password=data['monit_httpd_username'], monit_config_directory=data['monit_httpd_username'], monit_binary_path=data['monit_httpd_username'], ssh_ip=data['ssh_ip'], ssh_username=data['ssh_username'],  ssh_private_key=data['ssh_private_key'])
+    except : 
+        id = 0
+    return id
 
 def del_post(id):
-    db.delete('hosts', where="id=$id", vars=locals())
+    try:
+        db.delete('hosts', where="id=$id", vars=locals())
+        retval = 1
+    except : 
+        retval = 0
+        return retval
 
 def update_host(id, data):
-    db.update('hosts', where="id=$id", vars=locals(), title=title, content=text)
-
-
-
+    try:
+        db.update('hosts', where="id=$id", vars=locals(), monit_httpd_url=data['monit_httpd_url'],  monit_httpd_username=data['monit_httpd_username'], monit_httpd_password=data['monit_httpd_username'], monit_config_directory=data['monit_httpd_username'], monit_binary_path=data['monit_httpd_username'], ssh_ip=data['ssh_ip'], ssh_username=data['ssh_username'],  ssh_private_key=data['ssh_private_key'])
+        retval = 1
+    except : 
+        retval = 0
+        return retval

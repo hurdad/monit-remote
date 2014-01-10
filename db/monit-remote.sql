@@ -14,8 +14,7 @@ CREATE TABLE hosts (
   monit_binary_path TEXT NOT NULL DEFAULT '/bin/monit',
   ssh_ip TEXT NOT NULL DEFAULT 'localhost',
   ssh_username TEXT NOT NULL DEFAULT 'root',
-  ssh_private_key TEXT NULL
+  ssh_private_key TEXT NOT NULL DEFAULT '~/.ssh/id_rsa'
 );
-CREATE UNIQUE INDEX monit_httpd_url_UNIQUE on hosts (monit_httpd_url);
 INSERT INTO hosts (monit_httpd_url) VALUES('http://localhost:2812');
 INSERT INTO hosts (monit_httpd_url) VALUES('http://localhost:2813');

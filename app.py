@@ -12,8 +12,8 @@ urls = (
     '/action/restart/(\d+)/(.*)', 'controllers.actions.restart',
     '/action/monitor/(\d+)/(.*)', 'controllers.actions.monitor',
     '/action/unmonitor/(\d+)/(.*)', 'controllers.actions.unmonitor',
-    '/host/list', 'controllers.hosts.list',
-    '/host/(\d+)', 'controllers.hosts.crud',
+    '/host/add', 'controllers.hosts.add',   
+    '/host/(\d+)', 'controllers.hosts.rest',
     '/config/list/(\d+)', 'controllers.configs.list',
     '/config/(\d+)/(.*?)', 'controllers.configs.crud'
 )

@@ -92,18 +92,13 @@ $def with (summary)
                           </div>
                         </div>
                     </td>
-                    <td><button type="button" class="btn btn-info" action="details" host-id="$system['id']">Details</button></td>
-                    <td><button type="button" class="btn btn-primary" action="edit" host-id="$system['id']">Edit</button></td>
+                    <td><button type="button" class="btn btn-info" action="detail-host" host-id="$system['id']">Details</button></td>
+                    <td><button type="button" class="btn btn-primary" action="edit-host" host-id="$system['id']">Edit</button></td>
                 </tr>   
             </tbody>
         </table>
-
-
-
-  
     </div>
     <!-- /container-->
-
 
     <!-- add-host-modal -->
     <div class="modal fade" id="add-host-modal">>
@@ -111,7 +106,7 @@ $def with (summary)
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"><h3>Add Host</h3></h4>
+                    <h4 class="modal-title"><h3>Add Host</h3></h4>
                 </div>
                 <div class="modal-body">
                     <form role="form">
@@ -147,18 +142,89 @@ $def with (summary)
                             <label for="add-ssh-private-key-text">SSH Private Key</label>
                             <input type="text" class="form-control" id="add-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
                         </div>
-                    </form>
-                            
+                    </form>       
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                    <div id="add-host-alert" class="alert alert-danger"></div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="add-host-modal-save">Save changes</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- edit-host-modal -->
+    <div class="modal fade" id="edit-host-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><h3>Edit Host</h3></h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="edit-monit-httpd-url-text">Monit httpd URL</label>
+                            <input type="text" class="form-control" id="edit-monit-httpd-url-text" placeholder="http://monit-host:2812">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-monit-httpd-username-text">Monit httpd username</label>
+                            <input type="text" class="form-control" id="edit-monit-httpd-username-text" placeholder="admin">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-monit-httpd-password-text">Monit httpd password</label>
+                            <input type="text" class="form-control" id="edit-monit-httpd-password-text" placeholder="monit">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-monit-config-directory-text">Monit config directory</label>
+                            <input type="text" class="form-control" id="edit-monit-config-directory-text" placeholder="/etc/monit.d/">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-monit-binary-path-text">Monit binary path</label>
+                            <input type="text" class="form-control" id="edit-monit-binary-path-text" placeholder="/bin/monit">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-ssh-ip-text">SSH IP</label>
+                            <input type="text" class="form-control" id="edit-ssh-ip-text" placeholder="monit-host"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-ssh-username-text">SSH username</label>
+                            <input type="text" class="form-control" id="edit-ssh-username-text" placeholder="root">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-ssh-private-key-text">SSH Private Key</label>
+                            <input type="text" class="form-control" id="edit-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
+                        </div>
+                    </form>       
+                </div>
+                <div class="modal-footer">
+                <div id="edit-host-alert" class="alert alert-danger"></div>
+                <button type="button" class="btn btn-danger" action="delete-host">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="edit-host-modal-save">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
+    <div class="modal fade" id="confirmation-delete-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete?</p>
+                </div>
+                <div class="modal-footer">
+                    <div id="confirmation-delete-alert" class="alert alert-danger"></div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="continue-delete-button">Continue</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/static/include/jquery/jquery-1.10.2.min.js"></script>

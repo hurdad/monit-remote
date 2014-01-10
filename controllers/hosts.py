@@ -2,27 +2,28 @@ import web
 import json
 from models import host
 
-class list:
-
-    def GET(self):
-        hosts = host.get_hosts()
+class add:
+    def POST(self):
+        post_input = web.input()
         web.header('Content-Type', 'application/json')
-        return json.dumps(hosts)
-       
-class crud:
+        return json.dumps({'success' : success, 'message' : 'DB Error' if success == 0 else  '' })
 
+class rest:
+    #get    
     def GET(self, id):
         myhost = host.get_host(id)
         web.header('Content-Type', 'application/json')
-        return json.dumps(hosts)     
-       
-    def POST(self, id):
-        post_input = web.input()
-        return host.new_host(post_input)
-
+        return json.dumps(myhost)     
+ 
+    #edit
     def PUT(self, id):
-        return  host.update_host(id, data)
+        put_input = web.input()
+        success = 1 if host.update_host(id, put_input) is None else 0
+        web.header('Content-Type', 'application/json')
+        return json.dumps({'success' : success, 'message' : 'DB Error' if success == 0 else  '' })
 
+    #delete
     def DELETE(self, id):
-        return  host.del_host(id)
-
+        success = host.del_host(id)
+        web.header('Content-Type', 'application/json')
+        return json.dumps({'success' : success, 'message' : 'DB Error' if success == 0 else  '' })
