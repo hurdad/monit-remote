@@ -1,4 +1,4 @@
-$def with (status)
+$def with (host_id, status)
 
 <!DOCTYPE html>
 <html>
@@ -33,14 +33,14 @@ $def with (status)
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#" id="add-monit-host">Add Configuration</a></li>    
+                        <li class="active"><a href="#" host-id="$host_id" id="add-monit-config">Add Configuration</a></li>    
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </div>
         <div class="container">
             <div class="jumbotron">
-                <h1>Monit Details</h1>
+                <h1>Host Details</h1>
                 <p>$status['systems'][0]['name']</p>
                 <p>$status['platform']</p>
             </div>
@@ -57,64 +57,179 @@ $def with (status)
                             <th>PID</th>
                             <th style="width: 100px">CPU</th>
                             <th style="width: 100px">Memory</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th style="width: 100px">
+                            <th style="width: 100px">
+                            <th style="width: 100px">
+                            <th style="width: 100px">
                         </tr>
                     </thead>
                     <tbody>
                         $for proc in status['processes']
                         <tr>
                             <td>$proc['name']</td>
-                            <td>$proc['status']</td>
-                            <td>$proc['uptime']</td>
+                            $if proc['status'] == '0' and proc['monitored'] == '2':
+                                 <td style="color:orange">initializing</td>
+                            $elif proc['status'] == '0' and proc['monitored'] == '1':
+                                 <td style="color:green">running</td>
+                             $elif fs['status'] == '2' and fs['monitored'] == '1':
+                                 <td style="color:red">alert</td>
+                            $elif proc['status'] == '0' and proc['monitored'] == '0':
+                                 <td style="color:red">not monitored</td>
+                            $elif proc['status'] == '512' and proc['monitored'] == '1':
+                                 <td style="color:red">does not exist</td>
+                            $else:
+                                 <td style="color:red">unknown</td>
+                           
+                            <td>$proc['uptime'] s</td>
                             <td>$proc['pid']</td>
-                            <td>$proc['memory']</td>  
-                            <td>$proc['cpu']</td>  
-                            <td><button type="button" class="btn btn-primary" action="start-proc" host-id="$proc['name']">Start</button></td>
-                            <td><button type="button" class="btn btn-primary" action="stop-proc" host-id="$proc['name']">Stop</button></td>
-                            <td><button type="button" class="btn btn-primary" action="restart-proc" host-id="$proc['name']">Restart</button></td>
-                            <td><button type="button" class="btn btn-primary" action="edit" host-id="$proc['name']">Edit</button></td>
+                            <td>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="$proc['cpu']" aria-valuemin="0" aria-valuemax="100" style="width: $proc['cpu']%;">
+                                    <span class="show">$proc['cpu'] %</span>
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="$proc['memory']" aria-valuemin="0" aria-valuemax="100" style="width: $proc['memory']%;">
+                                    <span class="show">$proc['memory_kilobyte'] KB</span>
+                                  </div>
+                                </div>
+                            </td>
+                            <td><button type="button" class="btn btn-success" action="start-proc" host-id="$host_id" proc-name="$proc['name']">Start</button></td>
+                            <td><button type="button" class="btn btn-danger" action="stop-proc" host-id="$host_id" proc-name="$proc['name']">Stop</button></td>
+                            <td><button type="button" class="btn btn-primary" action="restart-proc" host-id="$host_id" proc-name="$proc['name']">Restart</button></td>
+                            <td><button type="button" class="btn btn-info" action="edit" host-id="$host_id" proc-name="$proc['name']">Edit</button></td>
                         </tr>
                     </tbody>
                 </table>
+            
+            $if len(status['filesystems']) > 0:
+                <div class="page-header">
+                    <h1>Filesystems</h1>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th style="width: 200px">Space Usage</th>
+                            <th style="width: 200px">Inodes Usage</th>
+                            <th style="width: 100px">
+                        </tr>
+                       
+                    </thead>
+                    <tbody>
+                        $for fs in status['filesystems']
+                        <tr>
+                            <td>$fs['name']</td>
+                            $if fs['status'] == '0' and fs['monitored'] == '2':
+                                 <td style="color:orange">initializing</td>
+                            $elif fs['status'] == '0' and fs['monitored'] == '1':
+                                 <td style="color:green">accessible</td>
+                            $elif fs['status'] == '2' and fs['monitored'] == '1':
+                                 <td style="color:red">alert</td>
+                            $elif fs['status'] == '0' and fs['monitored'] == '0':
+                                 <td style="color:red">not monitored</td>
+                            $elif fs['status'] == '512' and fs['monitored'] == '1':
+                                 <td style="color:red">does not exist</td>
+                            $else:
+                                 <td style="color:red">unknown</td>
 
-            <div class="page-header">
-                <h1>Filesystems</h1>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th style="width: 100px">Space Usage</th>
-                        <th style="width: 100px">Inodes usage</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                   
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <td>test</td>
-
-        <td>test</td>
-        <td>test</td>
-        <td>test</td>
-        <td>test</td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <div class="page-header">
-                <h1>Hosts</h1>
-            </div>
-
+                            <td>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="$fs['percent']" aria-valuemin="0" aria-valuemax="100" style="width: $fs['percent']%;">
+                                    <span class="show">$fs['usage']</span>
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" aria-valuenow="$fs['inode_percent']" aria-valuemin="0" aria-valuemax="100" style="width: $fs['inode_percent']%;">
+                                    <span class="show">$fs['inode_usage']</span>
+                                  </div>
+                                </div>
+                            </td>
+                            <td><button type="button" class="btn btn-info" action="edit" host-id="$host_id" proc-name="$fs['name']">Edit</button></td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
         <!-- /container-->
 
+        <!-- add-config-modal -->
+        <div class="modal fade" id="add-config-modal">>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h3>Add Configuration</h3></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="add-config-value-textarea">Configuration</label>
+                                <textarea class="form-control" rows="5" id="add-config-value-textarea"></textarea>
+                                <span class="help-block">Note: service names are unique. adding an existing service will overwrite the existing!</span>
+                            </div>
+                        </form>       
+
+                        <a href="http://mmonit.com/monit/documentation/monit.html#service_tests" target="_blank">Documentation</a>   
+                    </div>
+                    <div class="modal-footer">
+                        <div id="add-config-alert" class="alert alert-danger"></div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="add-config-modal-save">Add Configuration</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- edit-config-modal -->
+        <div class="modal fade" id="edit-config-modal">>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h3>Edit Configuration</h3></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="edit-config-value-textarea">Configuration</label>
+                                <textarea class="form-control" rows="5" id="edit-config-value-textarea"></textarea>
+                            </div>
+                        </form>       
+                    </div>
+                    <div class="modal-footer">
+                        <div id="edit-config-alert" class="alert alert-danger"></div>
+                        <button type="button" class="btn btn-danger" action="delete-config">Delete</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="edit-config-modal-save">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- confirmation-delete-modal -->
+        <div class="modal fade" id="confirmation-delete-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="confirmation-delete-alert" class="alert alert-danger"></div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="continue-delete-button">Continue</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="/static/include/jquery/jquery-1.10.2.min.js"></script>

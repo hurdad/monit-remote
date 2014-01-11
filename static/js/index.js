@@ -3,6 +3,11 @@ $(function () {
 
         var host_id;
 
+        //refresh 60 s
+        setTimeout(function () { 
+            location.reload();
+        }, 60 * 1000);
+
         //details button click handler
         $('td > button[action="detail-host"]').click(function () {
             host_id = $(this).attr('host-id');
@@ -18,7 +23,7 @@ $(function () {
 
             $.ajax({
                 type: "GET",
-                url: 'host/' + $(this).attr('host-id'),
+                url: '/host/' + $(this).attr('host-id'),
                 dataType: "json",
                 success: function (response) {
               
@@ -54,7 +59,7 @@ $(function () {
 
             $.ajax({
                 type: "PUT",
-                url: 'host/' + host_id,
+                url: '/host/' + host_id,
                 data: host,
                 dataType: 'json',
                 success: function(response) {
@@ -81,7 +86,7 @@ $(function () {
             $("#add-monit-httpd-username-text").val('admin');
             $("#add-monit-httpd-password-text").val('monit');
             $("#add-monit-config-directory-text").val('/etc/monit.d/');
-            $("#add-monit-binary-path-text").val('/bin/monit');
+            $("#add-monit-binary-path-text").val('/usr/bin/monit');
             $("#add-ssh-ip-text").val('localhost');
             $("#add-ssh-username-text").val('root');
             $("#add-ssh-private-key-text").val('~/.ssh/id_rsa');
@@ -121,8 +126,6 @@ $(function () {
                 }
             });
         });
-
-
 
         //host delete click handler
         $('button[action="delete-host"]').click(function() {

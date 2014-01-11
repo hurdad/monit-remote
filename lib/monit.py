@@ -62,9 +62,11 @@ def status(host):
             'name' : ctxt.xpathEval('name')[0].getContent(),
             'status' : ctxt.xpathEval('status')[0].getContent(),
             'monitored' : ctxt.xpathEval('monitor')[0].getContent(),
-            'percent' : ctxt.xpathEval('block/percent')[0].getContent() if len(ctxt.xpathEval('block/percent')) > 0 else "N/A",
+            'percent' : ctxt.xpathEval('block/percent')[0].getContent() if len(ctxt.xpathEval('block/percent')) > 0 else "0",
             'usage' : ctxt.xpathEval('block/usage')[0].getContent() if len(ctxt.xpathEval('block/usage')) > 0 else "N/A",
-            'total' : ctxt.xpathEval('block/total')[0].getContent() if len(ctxt.xpathEval('block/total')) > 0 else "N/A",
+            'inode_percent' : ctxt.xpathEval('inode/percent')[0].getContent() if len(ctxt.xpathEval('inode/percent')) > 0 else "0",
+            'inode_usage' : ctxt.xpathEval('inode/usage')[0].getContent() if len(ctxt.xpathEval('inode/usage')) > 0 else "N/A",
+           
         }
         filesystems.append(fs_tuple);
 
@@ -124,8 +126,7 @@ def stop(host, name):
 def restart(host, name):
     url = host.monit_httpd_url + "/" + name
     data = {'action' : 'restart' }
-    res = post_request(url, host.monit_httpd_username, host.monit_httpd_password, data)
-    return res['code']   
+    (code, body) = post_request(url, host.monit_httpd_username, host.monit_httpd_password, data)
     
 def monitor(host, name): 
     url = host.monit_httpd_url + "/" + name

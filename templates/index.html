@@ -39,7 +39,7 @@ $def with (summary)
         </div>
         <div class="container">
             <div class="jumbotron">
-              <h1>Monit Summary</h1>
+              <h1>System Summary</h1>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -52,8 +52,8 @@ $def with (summary)
                         <th style="width: 100px">Memory</th>
                         <th style="width: 100px">Swap</th>
                         <th style="width: 100px">Running Processes</th>
-                        <th></th>
-                        <th></th>
+                        <th style="width: 100px">
+                        <th style="width: 100px">
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,16 @@ $def with (summary)
                     <tr>
                         <td><a href=$system['url']>$system['url']</td>
                         <td>$system['system']</td>
-                        <td>$system['status']</td>
+
+                        $if system['status'] == '0' and system['monitored'] == '2':
+                            <td style="color:orange">initializing</td>
+                        $elif system['status'] == '0' and system['monitored'] == '1':
+                             <td style="color:green">running</td>
+                        $elif system['status'] == '0' and system['monitored'] == '0':
+                             <td style="color:red">not monitored</td>
+                        $else:
+                             <td style="color:red">unknown</td>
+                     
                         <td>$system['load']</td>
                         <td>
                             <div class="progress">
@@ -131,7 +140,8 @@ $def with (summary)
                             </div>
                             <div class="form-group">
                                 <label for="add-ssh-ip-text">SSH IP</label>
-                                <input type="text" class="form-control" id="add-ssh-ip-text" placeholder="monit-host"> 
+                                <input type="text" class="form-control" id="add-ssh-ip-text" placeholder="monit-host">
+                                <span class="help-block">Note: SSH required for remote configuration</span> 
                             </div>
                             <div class="form-group">
                                 <label for="add-ssh-username-text">SSH username</label>
@@ -140,13 +150,14 @@ $def with (summary)
                             <div class="form-group">
                                 <label for="add-ssh-private-key-text">SSH Private Key</label>
                                 <input type="text" class="form-control" id="add-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
+                                <span class="help-block">Note: ssh-copy-id -i ~/.ssh/id_rsa root@remote-host</span>
                             </div>
                         </form>       
                     </div>
                     <div class="modal-footer">
                         <div id="add-host-alert" class="alert alert-danger"></div>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="add-host-modal-save">Save changes</button>
+                        <button type="button" class="btn btn-primary" id="add-host-modal-save">Add Host</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -185,6 +196,7 @@ $def with (summary)
                             <div class="form-group">
                                 <label for="edit-ssh-ip-text">SSH IP</label>
                                 <input type="text" class="form-control" id="edit-ssh-ip-text" placeholder="monit-host"> 
+                                <span class="help-block">Note: SSH required for remote configuration</span>
                             </div>
                             <div class="form-group">
                                 <label for="edit-ssh-username-text">SSH username</label>
@@ -193,6 +205,7 @@ $def with (summary)
                             <div class="form-group">
                                 <label for="edit-ssh-private-key-text">SSH Private Key</label>
                                 <input type="text" class="form-control" id="edit-ssh-private-key-text" placeholder="~/.ssh/id_rsa">
+                                <span class="help-block">Note: ssh-copy-id -i ~/.ssh/id_rsa root@remote-host</span>
                             </div>
                         </form>       
                     </div>

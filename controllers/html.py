@@ -24,18 +24,9 @@ class index:
 
                 #loop systems
                 for system in mystatus['systems']:
-                    
-                    if system['status'] == '0' and system['monitored'] == '2':
-                        status = 'initializing'
-                    elif system['status'] == '0' and system['monitored'] == '1':
-                        status = 'running'
-                    elif system['status'] == '0' and system['monitored'] == '0':
-                        status = 'not monitored'
-                    else:
-                        status = 'unknown'
 
                     if system['swap_kilobyte'] != "N/A":
-                        swap_megabyte =int(float(system['swap_kilobyte'])/1024)
+                        swap_megabyte = int(float(system['swap_kilobyte'])/1024)
                     else:
                         swap_megabyte = "N/A"
         
@@ -43,7 +34,8 @@ class index:
                         'id' : myhost['id'],
                         'url' : myhost['monit_httpd_url'],
                         'system' : system['name'],
-                        'status' : status,
+                        'status' : system['status'],
+                        'monitored' : system['monitored'],
                         'load': system['load_one'] + ', ' + system['load_five'] + ', ' + system['load_fifteen'],
                         'cpu' : float(system['cpu_user'])  + float(system['cpu_system']) + float(system['cpu_wait']),
                         'memory' : system['memory'],
@@ -54,8 +46,6 @@ class index:
                         'total_processes' : len(mystatus['processes']),
                         'running_percent' : float(proc_counter) / float(len(mystatus['processes'])) * 100
                     })
-
-
             else:
                 summary.append({
                     'id' : myhost['id'],
@@ -72,14 +62,22 @@ class index:
                     'total_processes' : 0,
                     'running_percent' : 0.0
                 })
-
-           
+  
         return render.index(summary)
        
 class details:
 
-    def GET(self, id):
-        myhost = host.get_host(id)
+    def GET(self, host_id):
+        myhost = host.get_host(host_id)
         mystatus = monit.status(myhost)
-        return render.details(mystatus)
+        if mystatus is None:
+            mystatus = {
+                'platform' : {},
+                'systems' : [{'name':'N/A'}],
+                'processes' :[],
+                'filesystems' : [],
+                'hosts' : []
+            }
+
+        return render.details(host_id, mystatus)
        
