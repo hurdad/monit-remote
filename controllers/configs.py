@@ -6,25 +6,7 @@ import tempfile
 from lib import pysftp
 from models import host
 
-class list:
-    def GET(self, id):
-
-        #get host model        
-        myhost = host.get_host(id)
-
-        #connect to remote sftp
-        ssh = pysftp.Connection(myhost.ssh_ip, myhost.ssh_username, myhost.ssh_private_key)
-    
-        #list config directorys contents
-        mylist = srv.listdir(myhost.monit_config_directory)
-
-        #set response header content type to json
-        web.header('Content-Type', 'application/json')
-        
-        #print json to browser
-        return json.dumps(mylist)
-
-class crud:
+class rest:
 
     def GET(self, host_id, name):
         

@@ -14,8 +14,7 @@ urls = (
     '/action/unmonitor/(\d+)/(.*)', 'controllers.actions.unmonitor',
     '/host/add', 'controllers.hosts.add',   
     '/host/(\d+)', 'controllers.hosts.rest',
-    '/config/list/(\d+)', 'controllers.configs.list',
-    '/config/(\d+)/(.*?)', 'controllers.configs.crud'
+    '/config/(\d+)/(.*?)', 'controllers.configs.rest'
 )
 
 web.config.debug = True
