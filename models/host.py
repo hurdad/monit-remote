@@ -12,8 +12,6 @@ def get_host(id):
         return None
 
 def new_host(data):
-    print data
-   
     try:
         id = db.insert('hosts', monit_httpd_url=data['monit_httpd_url'],  monit_httpd_username=data['monit_httpd_username'], monit_httpd_password=data['monit_httpd_password'], monit_config_directory=data['monit_config_directory'], monit_binary_path=data['monit_binary_path'], ssh_ip=data['ssh_ip'], ssh_username=data['ssh_username'],  ssh_private_key=data['ssh_private_key'])
     except : 
