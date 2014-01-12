@@ -1,0 +1,19 @@
+/var/log/monit-remote/monit-remote.err {
+  daily
+  dateext
+  rotate 25
+  missingok
+  notifempty
+  compress
+  copytruncate
+}
+
+/var/log/monit-remote/monit-remote.out {
+  daily
+  dateext
+  rotate 25
+  missingok
+  notifempty
+  compress
+  copytruncate
+}

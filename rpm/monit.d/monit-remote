@@ -1,0 +1,3 @@
+check process monit-remote with pidfile /var/run/monit-remote.pid
+   start program = "/etc/init.d/monit-remote start"
+   stop  program = "/etc/init.d/monit-remote stop"
