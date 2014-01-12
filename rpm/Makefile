@@ -42,7 +42,7 @@ $(SOURCE_TARGET): mkdir
 		cp $(SOURCE) $(SOURCE_TARGET); \
 	else \
 		(cd `git rev-parse --show-toplevel` && git archive --format=tar \
-		        --prefix=monit-release-$(VERSION)/ $(GIT_COMMIT)) | gzip > $@; \
+		        --prefix=monit-remote-$(VERSION)/ $(GIT_COMMIT)) | gzip > $@; \
 	fi
 
 rpm: version $(SOURCE_TARGET)

@@ -71,7 +71,7 @@ $def with (host_id, status)
                                  <td style="color:orange">initializing</td>
                             $elif proc['status'] == '0' and proc['monitored'] == '1':
                                  <td style="color:green">running</td>
-                             $elif fs['status'] == '2' and fs['monitored'] == '1':
+                             $elif proc['status'] == '2' and proc['monitored'] == '1':
                                  <td style="color:red">alert</td>
                             $elif proc['status'] == '0' and proc['monitored'] == '0':
                                  <td style="color:red">not monitored</td>

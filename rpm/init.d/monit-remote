@@ -21,7 +21,9 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-exec="python /usr/share/monit-remote/app.py"
+exec="/usr/bin/python"
+cwd="/usr/share/monit-remote"
+script="/usr/share/monit-remote/app.py"
 prog="monit-remote"
 pid_file="/var/run/monit-remote.pid"
 stdout_log="/var/log/monit-remote/monit-remote.out"
@@ -35,7 +37,7 @@ start() {
     [ -x $exec ] || exit 5
     [ -f $config ] || exit 6
     echo -n $"Starting $prog: "
-    daemon daemonize -o ${stdout_log} -e ${stderr_log} -p ${pid_file} ${exec} $PORT
+    daemon daemonize -o ${stdout_log} -e ${stderr_log} -p ${pid_file} -c ${cwd} ${exec} ${script} $PORT
     retval=$?
     echo
     [ $retval -eq 0 ] && touch $lockfile

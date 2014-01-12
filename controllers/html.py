@@ -1,8 +1,8 @@
-import web
+import os, web
 from lib import monit
 from models import host
 
-render = web.template.render('templates')
+render = web.template.render(os.path.dirname('templates')
 
 class index:
 

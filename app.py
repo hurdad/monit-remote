@@ -1,5 +1,5 @@
+#!/usr/bin/python
 import web
-
 urls = (
     
     #html routes
@@ -16,7 +16,6 @@ urls = (
     '/host/(\d+)', 'controllers.hosts.rest',
     '/config/(\d+)/(.*?)', 'controllers.configs.rest'
 )
-
 web.config.debug = True
 
 if __name__ == "__main__":
