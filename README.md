@@ -3,7 +3,7 @@ monit-remote
 
 Monit Remote Configuration Python Web App
 
-* Connects to one or more monit's httpd services
+* Connects to one or more monit httpd services
 * Remote monit.d configuration via ssh (optional)
   
 Requirements
@@ -20,7 +20,7 @@ Allow for remote connection to monit httpd
      allow 0.0.0.0/0.0.0.0
 ```
 
-SSH Configuration
+SSH Configuration (optional)
 -----------------
 Run these commands as the same user accnt that runs monit-remote web app
 ```
